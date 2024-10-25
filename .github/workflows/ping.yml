@@ -1,9 +1,11 @@
-name: URL Ping
+name: URL Ping and Keep Alive
 
 on:
   schedule:
     - cron: '*/15 * * * *'  # Runs every 15 minutes
-  workflow_dispatch:  # Allows manual triggers
+  push:
+    branches: [ main ]  # Runs on push to main
+  workflow_dispatch:    # Allows manual triggers
 
 jobs:
   ping:
@@ -13,3 +15,12 @@ jobs:
     - name: Send ping request
       run: |
         curl -X GET https://visitl.onrender.com/
+        
+    - name: Update timestamp
+      run: |
+        date > timestamp.txt
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email 'actions@github.com'
+        git add timestamp.txt
+        git commit -m "Update timestamp"
+        git push
