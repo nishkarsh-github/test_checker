@@ -10,8 +10,13 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write    # Add this to allow pushing to the repository
     
     steps:
+    - name: Checkout repository   # Add this step first
+      uses: actions/checkout@v3
+
     - name: Send ping request
       run: |
         curl -X GET https://visitl.onrender.com/
